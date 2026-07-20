@@ -33,11 +33,11 @@ export async function updateSession(request: NextRequest) {
 
   const { data: { user } } = await supabase.auth.getUser();
 
-  // 保护路由：未登录跳转到 /login
-  const protectedPaths = ['/dashboard', '/tiles', '/bookmarks'];
-  const authPaths = ['/login', '/register'];
+export const PROTECTED_PATHS = ['/dashboard', '/tiles', '/bookmarks'];
 
-  const isProtectedPath = protectedPaths.some(p => request.nextUrl.pathname.startsWith(p));
+const authPaths = ['/login', '/register'];
+
+  const isProtectedPath = PROTECTED_PATHS.some(p => request.nextUrl.pathname.startsWith(p));
   const isAuthPath = authPaths.some(p => request.nextUrl.pathname.startsWith(p));
 
   if (!user && isProtectedPath) {

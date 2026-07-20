@@ -1,7 +1,5 @@
-import { updateSession } from '@/lib/supabase/middleware';
+import { updateSession, PROTECTED_PATHS } from '@/lib/supabase/middleware';
 import { NextResponse, type NextRequest } from 'next/server';
-
-const PROTECTED = ['/bookmarks'];
 
 export async function middleware(request: NextRequest) {
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
@@ -11,7 +9,7 @@ export async function middleware(request: NextRequest) {
     return await updateSession(request);
   } catch {
     // Supabase 不可达时：受保护路由重定向到登录，公开路由放行
-    const isProtected = PROTECTED.some(p => request.nextUrl.pathname.startsWith(p));
+    const isProtected = PROTECTED_PATHS.some(p => request.nextUrl.pathname.startsWith(p));
     if (isProtected) {
       return NextResponse.redirect(new URL('/login', request.url));
     }
