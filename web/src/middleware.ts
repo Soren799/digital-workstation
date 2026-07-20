@@ -1,12 +1,17 @@
 import { updateSession } from '@/lib/supabase/middleware';
-import type { NextRequest } from 'next/server';
+import { NextResponse, type NextRequest } from 'next/server';
 
 export async function middleware(request: NextRequest) {
-  // 构建时环境变量未配置时直接放行
+  // 环境变量缺失时直接放行（构建阶段）
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
-    return;
+    return NextResponse.next();
   }
-  return await updateSession(request);
+  try {
+    return await updateSession(request);
+  } catch {
+    // 边缘环境异常时放行，避免崩溃
+    return NextResponse.next();
+  }
 }
 
 export const config = {
