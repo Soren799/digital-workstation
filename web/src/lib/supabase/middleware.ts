@@ -1,6 +1,8 @@
 import { createServerClient, type CookieOptions } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
 
+export const PROTECTED_PATHS = ['/dashboard', '/tiles', '/bookmarks'];
+
 export async function updateSession(request: NextRequest) {
   let response = NextResponse.next({
     request: {
@@ -33,9 +35,7 @@ export async function updateSession(request: NextRequest) {
 
   const { data: { user } } = await supabase.auth.getUser();
 
-export const PROTECTED_PATHS = ['/dashboard', '/tiles', '/bookmarks'];
-
-const authPaths = ['/login', '/register'];
+  const authPaths = ['/login', '/register'];
 
   const isProtectedPath = PROTECTED_PATHS.some(p => request.nextUrl.pathname.startsWith(p));
   const isAuthPath = authPaths.some(p => request.nextUrl.pathname.startsWith(p));
