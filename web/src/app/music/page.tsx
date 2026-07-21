@@ -28,6 +28,9 @@ export default function MusicPage() {
 
   useEffect(() => {
     const audio = new Audio(track.file);
+    audio.setAttribute('playsinline', '');
+    audio.setAttribute('webkit-playsinline', '');
+    audio.preload = 'auto';
     audioRef.current = audio;
 
     const onLoaded = () => setDuration(audio.duration);
@@ -53,10 +56,12 @@ export default function MusicPage() {
     if (!audioRef.current) return;
     if (isPlaying) {
       audioRef.current.pause();
+      setIsPlaying(false);
     } else {
-      audioRef.current.play().catch(() => {});
+      audioRef.current.play().then(() => setIsPlaying(true)).catch(() => {
+        // 手机端需要用户交互，静默失败
+      });
     }
-    setIsPlaying(!isPlaying);
   };
 
   const prevTrack = () => {
