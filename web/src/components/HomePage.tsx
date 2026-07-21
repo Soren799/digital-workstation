@@ -24,9 +24,9 @@ export function HomePage() {
         <div
           className="absolute inset-0 animate-aurora"
           style={{
-            backgroundImage: `repeating-linear-gradient(100deg, rgba(59,130,246,0.2) 0%, rgba(139,92,246,0.15) 5%, transparent 10%, rgba(16,185,129,0.12) 15%, rgba(59,130,246,0.2) 20%),
-            repeating-linear-gradient(200deg, rgba(139,92,246,0.18) 0%, rgba(59,130,246,0.12) 10%, transparent 15%, rgba(236,72,153,0.1) 20%, rgba(139,92,246,0.18) 25%)`,
-            backgroundSize: '200% 200%, 200% 200%',
+            backgroundImage: `repeating-linear-gradient(100deg, rgba(59,130,246,0.18) 0%, rgba(139,92,246,0.12) 7%, transparent 14%, rgba(16,185,129,0.1) 21%, rgba(59,130,246,0.08) 35%, transparent 50%),
+            repeating-linear-gradient(200deg, rgba(139,92,246,0.15) 0%, rgba(59,130,246,0.1) 10%, transparent 20%, rgba(236,72,153,0.08) 30%, rgba(139,92,246,0.05) 45%, transparent 60%)`,
+            backgroundSize: '400% 400%, 400% 400%',
             maskImage: 'radial-gradient(ellipse 90% 70% at 50% 40%, black 30%, transparent 70%)',
             WebkitMaskImage: 'radial-gradient(ellipse 90% 70% at 50% 40%, black 30%, transparent 70%)',
             willChange: 'background-position',
