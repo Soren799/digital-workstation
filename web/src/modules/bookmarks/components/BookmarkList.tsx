@@ -4,13 +4,13 @@ import { useState, useEffect, useCallback } from 'react';
 import { BookmarkCard } from './BookmarkCard';
 import { BookmarkEditor } from './BookmarkEditor';
 import { Button } from '@/components/ui/Button';
-import { useAuth } from '@/modules/auth';
+import { useAdmin } from '@/hooks/useAdmin';
 import { createClient } from '@/lib/supabase/client';
 import type { Bookmark, BookmarkType } from '@/types';
 import { Plus, Search, Loader2, Folders } from 'lucide-react';
 
 export function BookmarkList() {
-  const { user, profile } = useAuth();
+  const { isAdmin } = useAdmin();
   const [bookmarks, setBookmarks] = useState<Bookmark[]>([]);
   const [loading, setLoading] = useState(true);
   const [editorOpen, setEditorOpen] = useState(false);
@@ -21,18 +21,10 @@ export function BookmarkList() {
 
   const fetchBookmarks = useCallback(async () => {
     setLoading(true);
-    let query = supabase.from('bookmarks').select('*').order('created_at', { ascending: false });
-
-    if (!user) {
-      query = query.eq('is_public', true);
-    } else {
-      query = query.or(`is_public.eq.true,user_id.eq.${user.id}`);
-    }
-
-    const { data, error } = await query;
+    const { data, error } = await supabase.from('bookmarks').select('*').order('created_at', { ascending: false });
     if (!error && data) setBookmarks(data as Bookmark[]);
     setLoading(false);
-  }, [user, supabase]);
+  }, [supabase]);
 
   useEffect(() => {
     fetchBookmarks();
@@ -91,7 +83,7 @@ export function BookmarkList() {
               className="w-full pl-10 pr-4 py-2 bg-[rgb(var(--card))] border border-[rgb(var(--border))] rounded-lg text-sm text-[rgb(var(--foreground))] placeholder:text-[rgb(var(--muted-foreground))] focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors"
             />
           </div>
-          {user && profile?.role !== 'visitor' && (
+          {isAdmin && (
             <Button onClick={handleNew} size="sm">
               <Plus size={16} />
               新建

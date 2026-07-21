@@ -1,110 +1,85 @@
 'use client';
 
-import { useAuth } from '@/modules/auth';
-import { LogOut, User, Bookmark } from 'lucide-react';
+import { useAdmin } from '@/hooks/useAdmin';
+import { Lock, Unlock, Home, Sparkles } from 'lucide-react';
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { motion, useScroll, useMotionValueEvent } from 'motion/react';
 
 export function TopBar() {
-  const { user, profile, signOut } = useAuth();
-  const [showMenu, setShowMenu] = useState(false);
+  const { isAdmin, unlock, lock } = useAdmin();
+  const [showPwd, setShowPwd] = useState(false);
+  const [pwd, setPwd] = useState('');
+  const [error, setError] = useState(false);
+  const [visible, setVisible] = useState(true);
+  const { scrollY } = useScroll();
   const router = useRouter();
 
+  useMotionValueEvent(scrollY, 'change', (latest) => {
+    const prev = scrollY.getPrevious() ?? 0;
+    if (latest < prev || latest < 50) setVisible(true);
+    else if (latest > 100 && latest > prev) setVisible(false);
+  });
+
+  const handleUnlock = () => {
+    if (unlock(pwd)) { setShowPwd(false); setPwd(''); setError(false); }
+    else setError(true);
+  };
+
   return (
-    <header className="h-14 glass border-b border-white/5 flex items-center justify-between px-4 lg:px-8 sticky top-0 z-40">
-      {/* 左侧 — Logo */}
-      <Link href="/" className="text-lg font-bold tracking-tight shrink-0">
-        <span className="text-blue-400">数字</span>
-        <span className="text-white/80">工作台</span>
-      </Link>
+    <motion.header
+      initial={{ y: 0, opacity: 1 }}
+      animate={{ y: visible ? 0 : -100, opacity: visible ? 1 : 0 }}
+      transition={{ duration: 0.3, ease: 'easeInOut' }}
+      className="fixed top-4 left-1/2 -translate-x-1/2 z-50"
+    >
+      <nav className="flex items-center justify-center gap-3 px-4 py-2 rounded-full glass-strong border border-white/10 shadow-2xl shadow-black/40">
+        {/* Logo */}
+        <Link href="/" className="flex items-center gap-1.5 px-3 py-1.5 rounded-full hover:bg-white/5 transition-colors">
+          <Sparkles size={16} className="text-blue-400" />
+          <span className="text-sm font-semibold text-white/70 hidden sm:inline">WS</span>
+        </Link>
 
-      {/* 右侧 */}
-      <div className="flex items-center gap-2">
-        {/* 收藏入口 — 仅登录用户可见 */}
-        {user && (
-          <button
-            onClick={() => router.push('/bookmarks')}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium
-                       bg-white/5 hover:bg-white/10 border border-white/5
-                       text-white/60 hover:text-white/90 transition-all"
-          >
-            <Bookmark size={14} />
-            收藏
+        {/* 主页 */}
+        <button
+          onClick={() => { router.push('/'); setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 100); }}
+          className="flex items-center gap-1.5 px-4 py-1.5 rounded-full text-sm text-white/60 hover:text-white hover:bg-white/5 transition-all"
+        >
+          <Home size={14} />
+          <span className="hidden sm:inline">主页</span>
+        </button>
+
+        {/* 分隔 */}
+        <div className="w-px h-5 bg-white/10" />
+
+        {/* 密码锁 */}
+        {isAdmin ? (
+          <button onClick={lock} className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm text-green-400/80 hover:text-green-400 hover:bg-white/5 transition-all">
+            <Unlock size={14} />
+            <span className="hidden sm:inline">管理员</span>
           </button>
-        )}
-
-        {/* 用户菜单 */}
-        {user ? (
-          <div className="relative">
-            <button
-              onClick={() => setShowMenu(!showMenu)}
-              className="flex items-center gap-2 px-3 py-1.5 rounded-full hover:bg-white/5 transition-colors"
-            >
-              <div className="w-7 h-7 rounded-full bg-blue-600 flex items-center justify-center text-white text-xs font-bold">
-                {(profile?.display_name || user.email || 'U')[0].toUpperCase()}
-              </div>
-              <span className="hidden sm:block text-sm text-white/70">
-                {profile?.display_name || user.email?.split('@')[0]}
-              </span>
-            </button>
-
-            {showMenu && (
-              <>
-                <div className="fixed inset-0 z-10" onClick={() => setShowMenu(false)} />
-                <div className="absolute right-0 top-full mt-2 w-56 glass-strong border border-white/10 rounded-xl shadow-xl z-20 py-1 animate-fade-in">
-                  <div className="px-4 py-3 border-b border-white/10">
-                    <p className="text-sm font-medium text-white">{profile?.display_name || '用户'}</p>
-                    <p className="text-xs text-white/40 mt-0.5">{user.email}</p>
-                    <span className="inline-block mt-1.5 px-2 py-0.5 text-[10px] rounded-full bg-blue-500/20 text-blue-300 font-medium">
-                      {roleLabel(profile?.role)}
-                    </span>
-                  </div>
-                  {profile?.role === 'admin' && (
-                    <button
-                      onClick={() => { setShowMenu(false); router.push('/admin'); }}
-                      className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-white/60 hover:bg-white/5 transition-colors"
-                    >
-                      <User size={15} />
-                      后台管理
-                    </button>
-                  )}
-                  <button
-                    onClick={() => { setShowMenu(false); signOut(); }}
-                    className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-red-400 hover:bg-red-500/10 transition-colors"
-                  >
-                    <LogOut size={15} />
-                    退出登录
-                  </button>
-                </div>
-              </>
-            )}
+        ) : showPwd ? (
+          <div className="flex items-center gap-1">
+            <input
+              type="password"
+              value={pwd}
+              onChange={(e) => { setPwd(e.target.value); setError(false); }}
+              onKeyDown={(e) => e.key === 'Enter' && handleUnlock()}
+              placeholder="密码"
+              autoFocus
+              className="w-20 px-2 py-1 text-xs bg-white/5 border border-white/10 rounded-full text-white placeholder-white/20 focus:outline-none focus:border-blue-500/50"
+            />
+            <button onClick={handleUnlock} className="text-xs text-white/50 hover:text-white px-1">确定</button>
+            <button onClick={() => { setShowPwd(false); setPwd(''); setError(false); }} className="text-xs text-white/30 hover:text-white px-1">取消</button>
           </div>
         ) : (
-          <div className="flex items-center gap-2">
-            <Link
-              href="/login"
-              className="px-4 py-1.5 text-sm text-white/60 hover:text-white border border-white/10 rounded-full hover:bg-white/5 transition-all"
-            >
-              登录
-            </Link>
-            <Link
-              href="/register"
-              className="px-4 py-1.5 text-sm bg-blue-600 hover:bg-blue-500 text-white rounded-full transition-colors"
-            >
-              注册
-            </Link>
-          </div>
+          <button onClick={() => setShowPwd(true)} className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm text-white/40 hover:text-white hover:bg-white/5 transition-all">
+            <Lock size={14} />
+          </button>
         )}
-      </div>
-    </header>
+      </nav>
+      {error && <p className="text-xs text-red-400/80 text-center mt-1">密码错误</p>}
+    </motion.header>
   );
-}
-
-function roleLabel(role?: string) {
-  switch (role) {
-    case 'admin': return '管理员';
-    case 'friend': return 'Friend';
-    default: return '访客';
-  }
 }
