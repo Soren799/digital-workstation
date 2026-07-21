@@ -22,8 +22,9 @@ export function TopBar() {
     else if (latest > 100 && latest > prev) setVisible(false);
   });
 
-  const handleUnlock = () => {
-    if (unlock(pwd)) { setShowPwd(false); setPwd(''); setError(false); }
+  const handleUnlock = async () => {
+    const ok = await unlock(pwd);
+    if (ok) { setShowPwd(false); setPwd(''); setError(false); }
     else setError(true);
   };
 

@@ -4,17 +4,16 @@ import { createContext, useContext, useState, useEffect, useCallback } from 'rea
 
 interface AdminContextValue {
   isAdmin: boolean;
-  unlock: (password: string) => boolean;
+  unlock: (password: string) => Promise<boolean>;
   lock: () => void;
 }
 
 const AdminContext = createContext<AdminContextValue>({
   isAdmin: false,
-  unlock: () => false,
+  unlock: async () => false,
   lock: () => {},
 });
 
-const ADMIN_PASSWORD = 'Admin123456';
 const STORAGE_KEY = 'ws_admin';
 
 export function AdminProvider({ children }: { children: React.ReactNode }) {
@@ -24,8 +23,13 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
     if (localStorage.getItem(STORAGE_KEY) === '1') setIsAdmin(true);
   }, []);
 
-  const unlock = useCallback((password: string) => {
-    if (password === ADMIN_PASSWORD) {
+  const unlock = useCallback(async (password: string) => {
+    const res = await fetch('/api/admin/verify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password }),
+    });
+    if (res.ok) {
       localStorage.setItem(STORAGE_KEY, '1');
       setIsAdmin(true);
       return true;
