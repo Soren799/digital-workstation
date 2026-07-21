@@ -7,7 +7,6 @@ import { RippleGrid } from '@/components/ui/RippleGrid';
 import { NoiseButton } from '@/components/ui/NoiseButton';
 import { useRouter } from 'next/navigation';
 import { Bookmark, Music } from 'lucide-react';
-import { motion } from 'motion/react';
 
 export function HomePage() {
   const secondRef = useRef<HTMLDivElement>(null);
@@ -34,24 +33,6 @@ export function HomePage() {
             transform: 'translateZ(0)',
           }}
         />
-
-        {/* 流动光斑 */}
-        <motion.div
-          className="absolute w-96 h-96 rounded-full bg-blue-500/25 blur-[120px] pointer-events-none"
-          animate={{ x: [0, 60, -40, 20, 0], y: [0, -50, 30, -20, 0] }}
-          transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
-        />
-        <motion.div
-          className="absolute w-80 h-80 rounded-full bg-purple-500/20 blur-[120px] pointer-events-none right-0 bottom-1/4"
-          animate={{ x: [0, -50, 30, -20, 0], y: [0, 40, -30, 20, 0] }}
-          transition={{ duration: 25, repeat: Infinity, ease: 'linear' }}
-        />
-        <motion.div
-          className="absolute w-56 h-56 rounded-full bg-cyan-500/15 blur-[100px] pointer-events-none top-1/3 right-1/4"
-          animate={{ x: [0, -30, 50, -20, 0], y: [0, 30, -40, 10, 0] }}
-          transition={{ duration: 18, repeat: Infinity, ease: 'linear' }}
-        />
-
         {/* 内容 */}
         <div className="relative z-10 flex flex-col items-center gap-8 px-4">
           <div className="text-center space-y-4">

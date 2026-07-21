@@ -9,13 +9,11 @@ interface RippleGridProps {
   className?: string;
 }
 
-export function RippleGrid({ rows = 8, cols = 27, cellSize = 56, className = '' }: RippleGridProps) {
+export function RippleGrid({ rows = 6, cols = 20, cellSize = 60, className = '' }: RippleGridProps) {
   const [clickedCell, setClickedCell] = useState<{ row: number; col: number } | null>(null);
-  const [rippleKey, setRippleKey] = useState(0);
 
   const handleCellClick = useCallback((row: number, col: number) => {
     setClickedCell({ row, col });
-    setRippleKey(k => k + 1);
   }, []);
 
   return (
@@ -27,7 +25,6 @@ export function RippleGrid({ rows = 8, cols = 27, cellSize = 56, className = '' 
       }}
     >
       <div
-        key={`grid-${rippleKey}`}
         className="grid w-full h-full"
         style={{ gridTemplateColumns: `repeat(${cols}, ${cellSize}px)`, gridTemplateRows: `repeat(${rows}, ${cellSize}px)` }}
       >
@@ -49,7 +46,11 @@ export function RippleGrid({ rows = 8, cols = 27, cellSize = 56, className = '' 
                 width: cellSize,
                 height: cellSize,
                 opacity: 0.55,
-                animation: clickedCell ? `cell-ripple ${duration} ease-out 1 ${delay}` : undefined,
+                animationName: clickedCell ? 'cell-ripple' : 'none',
+                animationDuration: duration,
+                animationTimingFunction: 'ease-out',
+                animationIterationCount: '1',
+                animationDelay: delay,
                 boxShadow: '0px 0px 40px 1px rgba(0,0,0,0.5) inset',
               }}
             />
