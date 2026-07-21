@@ -21,8 +21,17 @@ export function HomePage() {
     <AppLayout>
       {/* ====== 第一页：Aurora 极光 + 欢迎 ====== */}
       <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
-        {/* Aurora 背景 */}
-        <div className="aurora-bg absolute inset-0" />
+        {/* Aurora 背景 — Aceternity 官方实现 */}
+        <div
+          className="absolute inset-0 animate-aurora"
+          style={{
+            backgroundImage: `repeating-linear-gradient(100deg, rgba(59,130,246,0.2) 0%, rgba(139,92,246,0.15) 5%, transparent 10%, rgba(16,185,129,0.12) 15%, rgba(59,130,246,0.2) 20%),
+            repeating-linear-gradient(200deg, rgba(139,92,246,0.18) 0%, rgba(59,130,246,0.12) 10%, transparent 15%, rgba(236,72,153,0.1) 20%, rgba(139,92,246,0.18) 25%)`,
+            backgroundSize: '200% 200%, 200% 200%',
+            maskImage: 'radial-gradient(ellipse 90% 70% at 50% 40%, black 30%, transparent 70%)',
+            WebkitMaskImage: 'radial-gradient(ellipse 90% 70% at 50% 40%, black 30%, transparent 70%)',
+          }}
+        />
 
         {/* 流动光斑 */}
         <motion.div
