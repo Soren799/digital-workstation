@@ -13,7 +13,8 @@ export function RippleGrid({ rows = 6, cols = 20, cellSize = 60, className = '' 
   const [clickedCell, setClickedCell] = useState<{ row: number; col: number } | null>(null);
 
   const handleCellClick = useCallback((row: number, col: number) => {
-    setClickedCell({ row, col });
+    setClickedCell(null);
+    requestAnimationFrame(() => setClickedCell({ row, col }));
   }, []);
 
   return (
