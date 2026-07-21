@@ -54,14 +54,14 @@ export function Sidebar({
       {/* 侧边栏 */}
       <aside
         className={`
-          fixed top-0 left-0 h-full w-64 bg-[rgb(var(--card))] border-r border-[rgb(var(--border))]
+          fixed top-0 left-0 h-full w-64 glass border-r border-white/10
           z-40 transform transition-transform duration-200 ease-in-out
           lg:translate-x-0 lg:static lg:z-auto
           ${open ? 'translate-x-0' : '-translate-x-full'}
         `}
       >
         {/* 移动端关闭按钮 */}
-        <div className="flex items-center justify-between px-4 h-16 border-b border-[rgb(var(--border))] lg:hidden">
+        <div className="flex items-center justify-between px-4 h-16 border-b border-white/10 lg:hidden">
           <span className="text-lg font-bold">
             <span className="text-blue-500">数字</span>工作台
           </span>
@@ -98,7 +98,7 @@ export function Sidebar({
         </nav>
 
         {/* 底部角色标识 */}
-        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-[rgb(var(--border))]">
+        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-white/10">
           <div className="flex items-center gap-2 text-xs text-[rgb(var(--muted-foreground))]">
             <div className="w-2 h-2 rounded-full bg-green-500" />
             {roleLabel(profile?.role)}

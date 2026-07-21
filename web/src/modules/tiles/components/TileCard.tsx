@@ -17,16 +17,23 @@ export function TileCard({ tile, className }: TileCardProps) {
   const content = (
     <div
       className={cn(
-        'group relative rounded-xl border border-[rgb(var(--border))] overflow-hidden transition-all duration-200',
-        'hover:border-blue-500/30 hover:shadow-lg hover:shadow-blue-500/5',
+        'group relative rounded-2xl overflow-hidden transition-all duration-300',
+        'glass',
+        'hover:border-white/20 hover:shadow-xl hover:shadow-black/20 hover:-translate-y-0.5',
         'animate-fade-in',
         className
       )}
-      style={{ backgroundColor: `${tile.color}15` }}
     >
+      {/* 颜色光晕 */}
+      <div
+        className="absolute inset-0 opacity-20 pointer-events-none"
+        style={{
+          background: `radial-gradient(circle at 0% 0%, ${tile.color}40, transparent 70%)`,
+        }}
+      />
       {/* 顶部色条 */}
       <div
-        className="absolute top-0 left-0 right-0 h-1"
+        className="absolute top-0 left-0 right-0 h-[2px] rounded-b-full"
         style={{ backgroundColor: tile.color }}
       />
 

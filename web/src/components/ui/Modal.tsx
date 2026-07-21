@@ -34,13 +34,13 @@ export function Modal({ open, onClose, title, children, className }: ModalProps)
       {/* 内容 */}
       <div
         className={cn(
-          'relative w-full max-w-lg bg-[rgb(var(--card))] border border-[rgb(var(--border))] rounded-2xl shadow-2xl animate-fade-in',
+          'relative w-full max-w-lg glass-strong border border-white/10 rounded-2xl shadow-2xl animate-fade-in',
           className
         )}
       >
         {/* 标题栏 */}
         {title && (
-          <div className="flex items-center justify-between px-6 py-4 border-b border-[rgb(var(--border))]">
+          <div className="flex items-center justify-between px-6 py-4 border-b border-white/10">
             <h2 className="text-lg font-semibold">{title}</h2>
             <button
               onClick={onClose}

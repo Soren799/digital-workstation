@@ -6,9 +6,11 @@ import { BookmarkList } from '@/modules/bookmarks/components/BookmarkList';
 export default function BookmarksPage() {
   return (
     <AppLayout>
-      <div>
-        <h1 className="text-2xl font-bold mb-1">📑 收藏</h1>
-        <p className="text-[rgb(var(--muted-foreground))] mb-6">管理你的链接、笔记和图片收藏</p>
+      <div className="max-w-3xl mx-auto px-4 pt-12 pb-20">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold mb-1">📑 收藏</h1>
+          <p className="text-white/30 text-sm">精选内容与灵感</p>
+        </div>
         <BookmarkList />
       </div>
     </AppLayout>

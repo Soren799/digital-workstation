@@ -27,7 +27,6 @@ export function BookmarkEditor({ open, onClose, onSaved, bookmark }: BookmarkEdi
   const [tags, setTags] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState('');
   const [category, setCategory] = useState('');
-  const [isPublic, setIsPublic] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
 
@@ -43,7 +42,6 @@ export function BookmarkEditor({ open, onClose, onSaved, bookmark }: BookmarkEdi
       setImageUrl(bookmark.image_url || '');
       setTags(bookmark.tags || []);
       setCategory(bookmark.category || '');
-      setIsPublic(bookmark.is_public);
     } else {
       reset();
     }
@@ -59,7 +57,6 @@ export function BookmarkEditor({ open, onClose, onSaved, bookmark }: BookmarkEdi
     setTags([]);
     setTagInput('');
     setCategory('');
-    setIsPublic(false);
     setError('');
   };
 
@@ -92,7 +89,6 @@ export function BookmarkEditor({ open, onClose, onSaved, bookmark }: BookmarkEdi
       image_url: type === 'image' ? imageUrl.trim() : null,
       tags,
       category: category.trim() || null,
-      is_public: isPublic,
     };
 
     let result;
@@ -201,17 +197,9 @@ export function BookmarkEditor({ open, onClose, onSaved, bookmark }: BookmarkEdi
           </div>
         </div>
 
-        {/* 分类 & 可见性 */}
-        <div className="flex gap-4">
-          <div className="flex-1">
-            <Input id="category" label="分类（可选）" value={category} onChange={(e) => setCategory(e.target.value)} placeholder="如：前端、设计" />
-          </div>
-          <div className="flex items-end">
-            <label className="flex items-center gap-2 cursor-pointer">
-              <input type="checkbox" checked={isPublic} onChange={(e) => setIsPublic(e.target.checked)} className="w-4 h-4 rounded accent-blue-600" />
-              <span className="text-sm text-[rgb(var(--muted-foreground))]">公开</span>
-            </label>
-          </div>
+        {/* 分类 */}
+        <div>
+          <Input id="category" label="分类（可选）" value={category} onChange={(e) => setCategory(e.target.value)} placeholder="如：前端、设计" />
         </div>
 
         <div className="flex justify-end gap-3 pt-2">

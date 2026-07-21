@@ -112,7 +112,7 @@ export function BookmarkList() {
           <p className="text-sm">点击右上角 + 添加你的第一条收藏</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="flex flex-col gap-2">
           {filtered.map((bookmark) => (
             <BookmarkCard
               key={bookmark.id}

@@ -1,7 +1,7 @@
 import { createServerClient, type CookieOptions } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
 
-export const PROTECTED_PATHS = ['/dashboard', '/tiles', '/bookmarks'];
+export const PROTECTED_PATHS = ['/admin'];
 
 export async function updateSession(request: NextRequest) {
   let response = NextResponse.next({
