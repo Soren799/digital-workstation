@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 
 interface RippleGridProps {
   rows?: number;
@@ -9,8 +9,18 @@ interface RippleGridProps {
   className?: string;
 }
 
-export function RippleGrid({ rows = 6, cols = 20, cellSize = 60, className = '' }: RippleGridProps) {
+export function RippleGrid({ rows = 6, cols: colsProp, cellSize = 60, className = '' }: RippleGridProps) {
+  const [cols, setCols] = useState(colsProp || 20);
   const [clickedCell, setClickedCell] = useState<{ row: number; col: number } | null>(null);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setCols(Math.ceil(window.innerWidth / cellSize) + 2);
+      const handler = () => setCols(Math.ceil(window.innerWidth / cellSize) + 2);
+      window.addEventListener('resize', handler);
+      return () => window.removeEventListener('resize', handler);
+    }
+  }, [cellSize]);
 
   const handleCellClick = useCallback((row: number, col: number) => {
     setClickedCell(null);
