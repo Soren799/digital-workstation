@@ -13,7 +13,7 @@ interface Track {
 // 从 public/music/ 读取文件列表
 const DEFAULT_TRACKS: Track[] = [
   { title: 'Is There Someone Else', file: '/music/Is There Someone Else_ - The Weeknd.mp3', color: '#f59e0b' },
-  { title: 'Popular', file: '/music/Popular (Music from the HBO Original Series) - The Weeknd、Playboi Carti、Madonna.mp3', color: '#3b82f6' },
+  { title: 'Popular', file: '/music/popular-the-weeknd.mp3', color: '#3b82f6' },
 ];
 
 export default function MusicPage() {
