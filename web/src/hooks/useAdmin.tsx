@@ -31,6 +31,7 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
     });
     if (res.ok) {
       localStorage.setItem(STORAGE_KEY, '1');
+      localStorage.setItem('ws_admin_pw', password);
       setIsAdmin(true);
       return true;
     }
@@ -39,6 +40,7 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
 
   const lock = useCallback(() => {
     localStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem('ws_admin_pw');
     setIsAdmin(false);
   }, []);
 

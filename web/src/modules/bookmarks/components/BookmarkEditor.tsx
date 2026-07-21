@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import { Modal } from '@/components/ui/Modal';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
-import { createClient } from '@/lib/supabase/client';
 import type { Bookmark, BookmarkType } from '@/types';
 import { X } from 'lucide-react';
 
@@ -29,8 +28,6 @@ export function BookmarkEditor({ open, onClose, onSaved, bookmark }: BookmarkEdi
   const [category, setCategory] = useState('');
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
-
-  const supabase = createClient();
 
   useEffect(() => {
     if (bookmark) {
@@ -77,9 +74,6 @@ export function BookmarkEditor({ open, onClose, onSaved, bookmark }: BookmarkEdi
     setSaving(true);
     setError('');
 
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) { setError('请先登录'); setSaving(false); return; }
-
     const payload = {
       type,
       title: title.trim(),
@@ -91,17 +85,20 @@ export function BookmarkEditor({ open, onClose, onSaved, bookmark }: BookmarkEdi
       category: category.trim() || null,
     };
 
-    let result;
+    const adminPw = localStorage.getItem('ws_admin_pw') || '';
+    const headers: Record<string,string> = { 'Content-Type': 'application/json', 'x-admin-password': adminPw };
+
+    let res;
     if (bookmark) {
-      result = await supabase.from('bookmarks').update(payload).eq('id', bookmark.id);
+      res = await fetch(`/api/bookmarks/${bookmark.id}`, { method: 'PATCH', headers, body: JSON.stringify(payload) });
     } else {
-      result = await supabase.from('bookmarks').insert({ ...payload, user_id: user.id });
+      res = await fetch('/api/bookmarks', { method: 'POST', headers, body: JSON.stringify(payload) });
     }
 
-    if (result.error) setError(result.error.message);
+    if (!res.ok) setError('保存失败');
     setSaving(false);
 
-    if (!result.error) {
+    if (res.ok) {
       onSaved();
       onClose();
     }

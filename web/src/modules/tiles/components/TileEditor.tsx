@@ -72,13 +72,6 @@ export function TileEditor({ open, onClose, onSaved, tile }: TileEditorProps) {
     setSaving(true);
     setError('');
 
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) {
-      setError('请先登录');
-      setSaving(false);
-      return;
-    }
-
     const payload = {
       title: title.trim(),
       description: description.trim(),
@@ -98,7 +91,7 @@ export function TileEditor({ open, onClose, onSaved, tile }: TileEditorProps) {
     } else {
       const { error: insertError } = await supabase
         .from('tiles')
-        .insert({ ...payload, user_id: user.id });
+        .insert(payload);
       if (insertError) { setError(insertError.message); setSaving(false); return; }
     }
 

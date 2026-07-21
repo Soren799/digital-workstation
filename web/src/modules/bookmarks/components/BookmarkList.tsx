@@ -32,7 +32,8 @@ export function BookmarkList() {
 
   const handleDelete = async (bookmark: Bookmark) => {
     if (!confirm('确定删除这条收藏？')) return;
-    await fetch(`/api/bookmarks/${bookmark.id}`, { method: 'DELETE' });
+    const adminPw = localStorage.getItem('ws_admin_pw') || '';
+    await fetch(`/api/bookmarks/${bookmark.id}`, { method: 'DELETE', headers: { 'x-admin-password': adminPw } });
     fetchBookmarks();
   };
 
