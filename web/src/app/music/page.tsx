@@ -19,6 +19,7 @@ const DEFAULT_TRACKS: Track[] = [
 export default function MusicPage() {
   const [currentTrack, setCurrentTrack] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
   const [duration, setDuration] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -144,17 +145,26 @@ export default function MusicPage() {
           </div>
 
           {/* 歌曲列表 */}
-          <div className="w-full space-y-1 mt-8">
+          <div className="w-full space-y-1 mt-8" onMouseLeave={() => setHoveredIdx(null)}>
             <p className="text-xs text-white/15 mb-3 text-center tracking-widest uppercase">Playlist</p>
-            {DEFAULT_TRACKS.map((t, i) => (
+            {DEFAULT_TRACKS.map((t, i) => {
+              const dist = hoveredIdx !== null ? Math.abs(i - hoveredIdx) : 99;
+              const highlight = dist === 0 ? 1 : dist === 1 ? 0.6 : dist === 2 ? 0.3 : 0;
+              return (
               <button
                 key={t.file}
                 onClick={() => { setCurrentTime(0); setIsPlaying(false); setCurrentTrack(i); }}
-                className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-full text-left transition-all text-sm
+                onMouseEnter={() => setHoveredIdx(i)}
+                className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-full text-left transition-all duration-200 text-sm
                   ${i === currentTrack
                     ? 'bg-white/10 border border-white/10'
-                    : 'hover:bg-white/[0.03] border border-transparent'
+                    : 'border border-transparent'
                   }`}
+                style={{
+                  backgroundColor: highlight > 0 ? `rgba(255,255,255,${highlight * 0.06})` : undefined,
+                  borderColor: highlight > 0.6 ? `rgba(255,255,255,${highlight * 0.12})` : 'transparent',
+                  transform: highlight > 0.6 ? `scale(${1 + highlight * 0.02})` : undefined,
+                }}
               >
                 <div className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: t.color }} />
                 <span className={i === currentTrack ? 'text-white/70' : 'text-white/30'}>
@@ -164,7 +174,8 @@ export default function MusicPage() {
                   <span className="ml-auto text-[10px] text-white/20 animate-pulse">ON AIR</span>
                 )}
               </button>
-            ))}
+              );
+            })}
           </div>
 
           {/* 提示 */}

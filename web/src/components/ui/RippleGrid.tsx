@@ -44,13 +44,13 @@ export function RippleGrid({ rows = 8, cols = 27, cellSize = 56, className = '' 
             <div
               key={i}
               onClick={() => handleCellClick(row, col)}
-              className="border-[0.5px] border-white/[0.04] cursor-pointer transition-opacity duration-150 hover:!opacity-80"
+              className="border-[0.5px] border-white/[0.12] cursor-pointer transition-all duration-200 hover:!opacity-100 hover:bg-white/[0.06]"
               style={{
                 width: cellSize,
                 height: cellSize,
-                opacity: 0.3,
+                opacity: 0.55,
                 animation: clickedCell ? `cell-ripple ${duration} ease-out 1 ${delay}` : undefined,
-                boxShadow: '0px 0px 40px 1px rgba(0,0,0,0.3) inset',
+                boxShadow: '0px 0px 40px 1px rgba(0,0,0,0.5) inset',
               }}
             />
           );

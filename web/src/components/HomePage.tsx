@@ -30,6 +30,8 @@ export function HomePage() {
             backgroundSize: '200% 200%, 200% 200%',
             maskImage: 'radial-gradient(ellipse 90% 70% at 50% 40%, black 30%, transparent 70%)',
             WebkitMaskImage: 'radial-gradient(ellipse 90% 70% at 50% 40%, black 30%, transparent 70%)',
+            willChange: 'background-position',
+            transform: 'translateZ(0)',
           }}
         />
 
@@ -77,7 +79,7 @@ export function HomePage() {
         className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#0a0a0a]"
       >
         {/* Ripple 网格背景 */}
-        <RippleGrid rows={8} cols={27} cellSize={56} />
+        <RippleGrid rows={6} cols={20} cellSize={60} />
 
         {/* 卡片区域 */}
         <div className="relative z-10 flex flex-col sm:flex-row items-center gap-8 sm:gap-16 px-4">
