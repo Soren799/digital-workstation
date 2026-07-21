@@ -32,7 +32,7 @@ export function TopBar() {
       initial={{ y: 0, opacity: 1 }}
       animate={{ y: visible ? 0 : -100, opacity: visible ? 1 : 0 }}
       transition={{ duration: 0.3, ease: 'easeInOut' }}
-      className="fixed top-4 left-1/2 -translate-x-1/2 z-50"
+      className="fixed top-4 inset-x-0 mx-auto max-w-max z-50"
     >
       <nav className="flex items-center justify-center gap-3 px-4 py-2 rounded-full glass-strong border border-white/10 shadow-2xl shadow-black/40">
         {/* Logo */}
