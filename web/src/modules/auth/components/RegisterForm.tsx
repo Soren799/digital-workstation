@@ -42,7 +42,7 @@ export function RegisterForm() {
       return;
     }
 
-    const { error: signUpError } = await supabase.auth.signUp({
+    const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
       email,
       password,
       options: {
@@ -56,10 +56,10 @@ export function RegisterForm() {
       return;
     }
 
-    // 绑定邀请码到新用户
-    const { data: { user } } = await supabase.auth.getUser();
-    if (user) {
-      await supabase.rpc('claim_invite_code', { p_code: inviteCode.trim(), p_user_id: user.id });
+    // 绑定邀请码到新用户（直接用 signUp 返回值，兼容邮箱确认场景）
+    const userId = signUpData?.user?.id || signUpData?.session?.user?.id;
+    if (userId) {
+      await supabase.rpc('claim_invite_code', { p_code: inviteCode.trim(), p_user_id: userId });
     }
 
     router.push('/');
